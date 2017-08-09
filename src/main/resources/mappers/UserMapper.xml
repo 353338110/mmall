@@ -116,4 +116,17 @@
       role = #{role,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="checkUsername" resultType="int" parameterType="String">
+    SELECT  COUNT(1) FROM mmall_user
+    WHERE username = #{username}
+  </select>
+
+  <select id="selectLogin" resultType="BaseResultMap" parameterType="map">
+    <include refid="Base_Column_List" />
+    FROM mmall_user
+    WHERE username = #{username}
+    and password = #{password}
+  </select>
+
 </mapper>
