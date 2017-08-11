@@ -18,7 +18,13 @@ public class UserController {
 
     @Autowired
     private IUserService iUserService;
-
+    public IUserService getIUserService() {
+        return iUserService;
+    }
+    @Autowired
+    public void setIUserService(IUserService iUserService) {
+        this.iUserService = iUserService;
+    }
     @RequestMapping(value = "login.do",method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse login(String username, String password, HttpSession session){

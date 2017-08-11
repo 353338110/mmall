@@ -14,6 +14,13 @@ public class UserServiceImpl implements IUserService{
 
     @Autowired
     private UserMapper userMapper;
+    /*public UserMapper getUserMapper() {
+        return userMapper;
+    }
+    @Autowired
+    public void setUserMapper(UserMapper userMapper) {
+        this.userMapper = userMapper;
+    }*/
 
     @Override
     public ServerResponse<User> login(String username, String password) {

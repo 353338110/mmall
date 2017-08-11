@@ -7,16 +7,16 @@
       <arg column="username" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="password" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="phone" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="role" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
-      <arg column="role" jdbcType="INTEGER" javaType="java.lang.Integer" />
     </constructor>
   </resultMap>
   <sql id="Base_Column_List" >
-    id, username, password, phone, create_time, update_time, role
+    id, username, password, phone, role, create_time, update_time
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from mmall_user
     where id = #{id,jdbcType=INTEGER}
@@ -26,12 +26,12 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.mmall.pojo.User" >
-    insert into mmall_user (id, username, password, 
-      phone, create_time, update_time, 
-      role)
-    values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
-      #{phone,jdbcType=VARCHAR}, now{}, now{},
-      #{role,jdbcType=INTEGER})
+    insert into mmall_user (id, username, password,
+    phone,  role, create_time,
+    update_time)
+    values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+     #{phone,jdbcType=VARCHAR},  #{role,jdbcType=INTEGER}, now(),
+    now())
   </insert>
   <insert id="insertSelective" parameterType="com.mmall.pojo.User" >
     insert into mmall_user
@@ -48,14 +48,14 @@
       <if test="phone != null" >
         phone,
       </if>
+      <if test="role != null" >
+        role,
+      </if>
       <if test="createTime != null" >
         create_time,
       </if>
       <if test="updateTime != null" >
         update_time,
-      </if>
-      <if test="role != null" >
-        role,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -71,14 +71,14 @@
       <if test="phone != null" >
         #{phone,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null" >
-        now{},
-      </if>
-      <if test="updateTime != null" >
-        now{},
-      </if>
       <if test="role != null" >
         #{role,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        now(),
+      </if>
+      <if test="updateTime != null" >
+        now(),
       </if>
     </trim>
   </insert>
@@ -94,14 +94,14 @@
       <if test="phone != null" >
         phone = #{phone,jdbcType=VARCHAR},
       </if>
+      <if test="role != null" >
+        role = #{role,jdbcType=INTEGER},
+      </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updateTime != null" >
-        now{},
-      </if>
-      <if test="role != null" >
-        role = #{role,jdbcType=INTEGER},
+        update_time = now(),
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -109,24 +109,22 @@
   <update id="updateByPrimaryKey" parameterType="com.mmall.pojo.User" >
     update mmall_user
     set username = #{username,jdbcType=VARCHAR},
-      password = #{password,jdbcType=VARCHAR},
-      phone = #{phone,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = now{},
-      role = #{role,jdbcType=INTEGER}
+    password = #{password,jdbcType=VARCHAR},
+    phone = #{phone,jdbcType=VARCHAR},
+    role = #{role,jdbcType=INTEGER},
+    create_time = #{createTime,jdbcType=TIMESTAMP},
+    update_time = now()
     where id = #{id,jdbcType=INTEGER}
   </update>
-
-  <select id="checkUsername" resultType="int" parameterType="String">
-    SELECT  COUNT(1) FROM mmall_user
-    WHERE username = #{username}
+  <select id="checkUsername" resultType="int" parameterType="string" >
+    select count(1) from mmall_user
+    where username = #{username}
   </select>
-
-  <select id="selectLogin" resultType="BaseResultMap" parameterType="map">
+  <select id="selectLogin" resultMap="BaseResultMap" parameterType="map">
+    SELECT
     <include refid="Base_Column_List" />
-    FROM mmall_user
-    WHERE username = #{username}
+    from mmall_user
+    where username = #{username}
     and password = #{password}
   </select>
-
 </mapper>
