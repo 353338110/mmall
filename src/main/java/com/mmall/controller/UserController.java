@@ -1,4 +1,4 @@
-package com.mmall.controller.portal;
+package com.mmall.controller;
 
 import com.mmall.common.Const;
 import com.mmall.common.ServerResponse;
@@ -27,8 +27,20 @@ public class UserController {
     }
     @RequestMapping(value = "login.do",method = RequestMethod.POST)
     @ResponseBody
+    //用用户名登陆
     public ServerResponse login(String username, String password, HttpSession session){
         ServerResponse<User> response = iUserService.login(username,password);
+        if (response.isSuccess()){
+            session.setAttribute(Const.CURRENT_USER,response.getData());
+        }
+        return response;
+    }
+
+    @RequestMapping(value = "login2.do",method = RequestMethod.POST)
+    @ResponseBody
+    //用手机号登陆
+    public ServerResponse loginByPhone(String phone, String password, HttpSession session){
+        ServerResponse<User> response = iUserService.loginByPhone(phone,password);
         if (response.isSuccess()){
             session.setAttribute(Const.CURRENT_USER,response.getData());
         }
@@ -39,7 +51,7 @@ public class UserController {
     @ResponseBody
     public ServerResponse<String> logout(HttpSession session){
         session.removeAttribute(Const.CURRENT_USER);
-        return ServerResponse.createBySuccess();
+        return (ServerResponse<String>)ServerResponse.createBySuccess();
     }
 
 }

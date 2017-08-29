@@ -4,7 +4,6 @@ import com.mmall.common.ServerResponse;
 import com.mmall.dao.UserMapper;
 import com.mmall.pojo.User;
 import com.mmall.service.IUserService;
-import com.sun.org.apache.regexp.internal.RE;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +34,20 @@ public class UserServiceImpl implements IUserService{
             return ServerResponse.createByErrorMessage("密码错误");
         }
         user.setPassword(StringUtils.EMPTY);
+        return ServerResponse.createBySuccess("登陆成功",user);
+    }
+
+    @Override
+    public ServerResponse<User> loginByPhone(String phone, String password) {
+        int resultCount = userMapper.checkPhone(phone);
+        if (resultCount == 0){
+            return ServerResponse.createByErrorMessage("手机号不存在");
+        }
+        User user = userMapper.selectLoginByPhone(phone,password);
+        if (null == user){
+            return ServerResponse.createByErrorMessage("密码错误");
+        }
+        user.setPassword("");
         return ServerResponse.createBySuccess("登陆成功",user);
     }
 }
