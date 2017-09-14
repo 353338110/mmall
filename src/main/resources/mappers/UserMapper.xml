@@ -3,7 +3,7 @@
 <mapper namespace="com.mmall.dao.UserMapper" >
   <resultMap id="BaseResultMap" type="com.mmall.pojo.User" >
     <constructor >
-      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <idArg column="id" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="username" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="password" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="phone" jdbcType="VARCHAR" javaType="java.lang.String" />
@@ -19,17 +19,17 @@
     select
     <include refid="Base_Column_List" />
     from mmall_user
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from mmall_user
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.mmall.pojo.User" >
     insert into mmall_user (id, username, password,
     phone, create_time,
     update_time,  role)
-    values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+    values (#{id,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
      #{phone,jdbcType=VARCHAR}, now(),
     now(),  #{role,jdbcType=INTEGER})
   </insert>
@@ -60,7 +60,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
-        #{id,jdbcType=INTEGER},
+        #{id,jdbcType=VARCHAR},
       </if>
       <if test="username != null" >
         #{username,jdbcType=VARCHAR},
@@ -104,7 +104,7 @@
         role = #{role,jdbcType=INTEGER},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.mmall.pojo.User" >
     update mmall_user
@@ -114,7 +114,7 @@
     create_time = #{createTime,jdbcType=TIMESTAMP},
     update_time = now(),
     role = #{role,jdbcType=INTEGER}
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
   <select id="checkUsername" resultType="int" parameterType="string" >
     select count(1) from mmall_user

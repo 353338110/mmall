@@ -3,7 +3,7 @@ package com.mmall.pojo;
 import java.util.Date;
 
 public class User {
-    private Integer id;
+    private String id;
 
     private String username;
 
@@ -17,7 +17,7 @@ public class User {
 
     private Integer role;
 
-    public User(Integer id, String username, String password, String phone, Date createTime, Date updateTime, Integer role) {
+    public User(String id, String username, String password, String phone, Date createTime, Date updateTime, Integer role) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -31,12 +31,12 @@ public class User {
         super();
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setId(String id) {
+        this.id = id == null ? null : id.trim();
     }
 
     public String getUsername() {
