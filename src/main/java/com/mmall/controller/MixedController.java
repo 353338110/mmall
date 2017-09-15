@@ -7,6 +7,12 @@ import com.mmall.pojo.Mixed;
 import com.mmall.pojo.User;
 import com.mmall.service.IFileService;
 import com.mmall.service.IMixedService;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.annotate.JsonAutoDetect;
+import org.codehaus.jackson.annotate.JsonMethod;
+import org.codehaus.jackson.map.DeserializationConfig;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +25,7 @@ import util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +39,7 @@ public class MixedController {
     private IFileService iFileService;
     @RequestMapping("upload.do")
     @ResponseBody
-    public ServerResponse uploadMixed(HttpSession session, Mixed mixed, @RequestParam(value = "upload_file",required = false)MultipartFile[] files) {
+    public ServerResponse uploadMixed(HttpSession session,@RequestParam(value = "mixed",required = false) String mixed, @RequestParam(value = "upload_file",required = false)MultipartFile[] files) {
         User user = (User) session.getAttribute(Const.CURRENT_USER);
         if (user==null){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"用户未登录，请登录");
@@ -40,9 +47,20 @@ public class MixedController {
         if (null==user.getId()){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"找不到用户Id");
         }
+        Mixed acc  = new Mixed();
+        ObjectMapper mapper = new ObjectMapper().setVisibility(JsonMethod.FIELD,
+                JsonAutoDetect.Visibility.ANY);
+        mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES,
+                false);
+
+        try {
+            acc = mapper.readValue(mixed, Mixed.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         List<String> fileUrls = new ArrayList<>();
         if (null==files || files.length==0){
-            return iMixedService.upLoadMixed(mixed);
+            return iMixedService.upLoadMixed(acc);
         }
 
         String path = Const.IMAGE_PATH;
@@ -51,10 +69,11 @@ public class MixedController {
             logger.info(targetFileName);
             fileUrls.add(Const.IMAGE_RETURN+targetFileName);
         }
-        if (null== StringUtils.mixedReplace(mixed.getMixedtext(),fileUrls)){
+        if (null== StringUtils.mixedReplace(acc.getMixedtext(),fileUrls)){
             return ServerResponse.createByErrorMessage("嵌入的参数不对应");
         }
-        mixed.setMixedtext(StringUtils.mixedReplace(mixed.getMixedtext(),fileUrls));
-        return iMixedService.upLoadMixed(mixed);
+        acc.setMixedtext(StringUtils.mixedReplace(acc.getMixedtext(),fileUrls));
+        acc.setId(StringUtils.getPrimarykey());
+        return iMixedService.upLoadMixed(acc);
     }
 }
