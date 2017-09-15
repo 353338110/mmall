@@ -39,8 +39,8 @@
   <insert id="insert" parameterType="com.mmall.pojo.Mixed" >
     insert into mmall_mixed (id, userId, create_time, 
       update_time, mixedtext)
-    values (#{id,jdbcType=VARCHAR}, #{userid,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{mixedtext,jdbcType=LONGVARCHAR})
+    values (#{id,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, now(),
+      now(), #{mixedtext,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.mmall.pojo.Mixed" >
     insert into mmall_mixed
@@ -48,7 +48,7 @@
       <if test="id != null" >
         id,
       </if>
-      <if test="userid != null" >
+      <if test="userId != null" >
         userId,
       </if>
       <if test="createTime != null" >
@@ -65,14 +65,14 @@
       <if test="id != null" >
         #{id,jdbcType=VARCHAR},
       </if>
-      <if test="userid != null" >
-        #{userid,jdbcType=VARCHAR},
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null" >
-        #{createTime,jdbcType=TIMESTAMP},
+        now(),
       </if>
       <if test="updateTime != null" >
-        #{updateTime,jdbcType=TIMESTAMP},
+        now(),
       </if>
       <if test="mixedtext != null" >
         #{mixedtext,jdbcType=LONGVARCHAR},
@@ -82,14 +82,14 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.mmall.pojo.Mixed" >
     update mmall_mixed
     <set >
-      <if test="userid != null" >
-        userId = #{userid,jdbcType=VARCHAR},
+      <if test="userId != null" >
+        userId = #{userId,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updateTime != null" >
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
+        now(),
       </if>
       <if test="mixedtext != null" >
         mixedtext = #{mixedtext,jdbcType=LONGVARCHAR},
@@ -99,17 +99,17 @@
   </update>
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.mmall.pojo.Mixed" >
     update mmall_mixed
-    set userId = #{userid,jdbcType=VARCHAR},
+    set userId = #{userId,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_time = now(),
       mixedtext = #{mixedtext,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.mmall.pojo.Mixed" >
     update mmall_mixed
-    set userId = #{userid,jdbcType=VARCHAR},
+    set userId = #{userId,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
+      update_time = now()
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

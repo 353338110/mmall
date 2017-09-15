@@ -5,7 +5,7 @@ import java.util.Date;
 public class Mixed {
     private String id;
 
-    private String userid;
+    private String userId;
 
     private Date createTime;
 
@@ -13,9 +13,9 @@ public class Mixed {
 
     private String mixedtext;
 
-    public Mixed(String id, String userid, Date createTime, Date updateTime, String mixedtext) {
+    public Mixed(String id, String userId, Date createTime, Date updateTime, String mixedtext) {
         this.id = id;
-        this.userid = userid;
+        this.userId = userId;
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.mixedtext = mixedtext;
@@ -33,12 +33,12 @@ public class Mixed {
         this.id = id == null ? null : id.trim();
     }
 
-    public String getUserid() {
-        return userid;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUserid(String userid) {
-        this.userid = userid == null ? null : userid.trim();
+    public void setUserId(String userId) {
+        this.userId = userId == null ? null : userId.trim();
     }
 
     public Date getCreateTime() {

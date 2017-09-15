@@ -37,7 +37,7 @@ public class UploadController {
         //String path = request.getSession().getServletContext().getRealPath("upload");
         List<String> fileUrls = new ArrayList<>();
         if (null==files || files.length==0){
-            return ServerResponse.createByErrorMessage("文件为空或");
+            return ServerResponse.createByErrorMessage("文件为空");
         }
         String path = Const.IMAGE_PATH;
         for (MultipartFile file:files) {
