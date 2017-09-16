@@ -55,6 +55,7 @@ public class MixedController {
 
         try {
             acc = mapper.readValue(mixed, Mixed.class);
+            acc.setId(StringUtils.getPrimarykey());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -73,7 +74,7 @@ public class MixedController {
             return ServerResponse.createByErrorMessage("嵌入的参数不对应");
         }
         acc.setMixedtext(StringUtils.mixedReplace(acc.getMixedtext(),fileUrls));
-        acc.setId(StringUtils.getPrimarykey());
+
         return iMixedService.upLoadMixed(acc);
     }
 }
