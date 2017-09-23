@@ -38,13 +38,13 @@ public class MoodLogController {
     private IMoodLogService iMoodLogService;
     @RequestMapping("mood.do")
     @ResponseBody
-    public ServerResponse upload(HttpSession session, @RequestParam(value = "upload_file",required = false)MultipartFile[] files,@RequestParam(value = "moodLog",required = false) String moodLogs){
+    public ServerResponse upload(HttpSession session, @RequestParam(value = "upload_file",required = false)MultipartFile[] files,@RequestParam(value = "title",required = false) String title,@RequestParam(value = "content",required = false) String content){
         //todo 可以设置用户权限还有必须登录用户才能上传
         User user = (User) session.getAttribute(Const.CURRENT_USER);
         if (user==null){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"用户未登录，请登录");
         }
-        MoodLog moodLog  = new MoodLog();
+        /*MoodLog moodLog  = new MoodLog();
         ObjectMapper mapper = new ObjectMapper().setVisibility(JsonMethod.FIELD,
                 JsonAutoDetect.Visibility.ANY);
         mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES,
@@ -54,7 +54,10 @@ public class MoodLogController {
             moodLog = mapper.readValue(moodLogs, MoodLog.class);
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
+        MoodLog moodLog = new MoodLog();
+        moodLog.setTitle(title);
+        moodLog.setContent(content);
         String moodLogId = StringUtils.getPrimarykey();
         moodLog.setId(moodLogId);
         moodLog.setType(1);
