@@ -16,6 +16,6 @@
 
 
     <import resource="applicationContext-datasource.xml"/>
-
+    <import resource="classpath:redisConfig.xml" />
 
 </beans>
