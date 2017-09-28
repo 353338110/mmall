@@ -30,12 +30,20 @@ public class StringUtils {
         String s = matcher.replaceAll("<img>"+fileUrls.get(count++)+"</img>"); //替换后的字符串
         return s;
     }
-    public static void main(String[] args) {
-        List<String> fileUrls = new ArrayList<>();
-        fileUrls.add("http://localhost:8080/image/aaaaaaaaaaaaaaaaaaa.jpg");
-        fileUrls.add("http://localhost:8080/image/bbbbbbbbbbbbbbbbbbb.jpg");
-        String orderingID= mixedReplace("sjflajsl<img>sdfs<img>" +
-                "sjfksjkf",fileUrls);
-        System.out.println(orderingID);
+
+    /**
+     * 获得一个UUID
+     * @return String UUID
+     */
+    public static String getUUID(){
+        String uuid = UUID.randomUUID().toString();
+        //去掉“-”符号
+        return uuid.replaceAll("-", "");
     }
+
+    /*public static void main(String[] args) {
+        String uuid = getUUID();
+        System.out.println(uuid);
+    }*/
+
 }

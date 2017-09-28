@@ -7,6 +7,7 @@ import com.mmall.pojo.Mixed;
 import com.mmall.pojo.User;
 import com.mmall.service.IFileService;
 import com.mmall.service.IMixedService;
+import com.mmall.service.IRedisService;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.annotate.JsonMethod;
@@ -37,16 +38,19 @@ public class MixedController {
     private IMixedService iMixedService;
     @Autowired
     private IFileService iFileService;
+    @Autowired
+    private IRedisService iRedisService;
     @RequestMapping("upload.do")
     @ResponseBody
-    public ServerResponse uploadMixed(HttpSession session,@RequestParam(value = "mixed",required = false) String mixed, @RequestParam(value = "upload_file",required = false)MultipartFile[] files) {
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
+    public ServerResponse uploadMixed(String uid,@RequestParam(value = "mixed",required = false) String mixed, @RequestParam(value = "upload_file",required = false)MultipartFile[] files) {
+       /* User user = (User) session.getAttribute(Const.CURRENT_USER);
         if (user==null){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"用户未登录，请登录");
+        }*/
+        if (!iRedisService.exists(uid)){
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"用户未登陆");
         }
-        if (null==user.getId()){
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"找不到用户Id");
-        }
+        iRedisService.expire(uid,Const.CACHE_TIME);
         Mixed acc  = new Mixed();
         ObjectMapper mapper = new ObjectMapper().setVisibility(JsonMethod.FIELD,
                 JsonAutoDetect.Visibility.ANY);

@@ -12,7 +12,9 @@ import java.util.concurrent.TimeUnit;
 @Component("iRedisService")
 public class RedisServiceImpl implements IRedisService{
 
+
     private StringRedisTemplate redisTemplate;
+    @Autowired
     public void setRedisTemplate(StringRedisTemplate redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
