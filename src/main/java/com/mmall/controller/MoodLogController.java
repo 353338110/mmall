@@ -11,15 +11,20 @@ import com.mmall.service.IRedisService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/moodlog/")
@@ -33,12 +38,8 @@ public class MoodLogController {
     private IRedisService iRedisService;
     @RequestMapping("mood.do")
     @ResponseBody
-    public ServerResponse upload(String uid, @RequestParam(value = "upload_file",required = false)MultipartFile[] files,@RequestParam(value = "title",required = false) String title,@RequestParam(value = "content",required = false) String content){
-        //todo 可以设置用户权限还有必须登录用户才能上传
-        /*User user = (User) session.getAttribute(Const.CURRENT_USER);
-        if (user==null){
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"用户未登录，请登录");
-        }*/
+    public ServerResponse upload(@RequestParam String uid, @RequestParam String title, @RequestParam String content, @RequestParam MultipartFile[] files, HttpServletRequest request){
+
         if (!iRedisService.exists(uid)){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"用户未登录，请登录");
         }

@@ -54,16 +54,20 @@ public class UserController {
     //用手机号登陆
     public ServerResponse loginByPhone(String phone, String password, HttpSession session){
         ServerResponse<User> response = iUserService.loginByPhone(phone,password);
+        String uid = StringUtils.getUUID();
         if (response.isSuccess()){
-            session.setAttribute(Const.CURRENT_USER,response.getData());
+            iRedisService.put(uid,response.getData(),Const.CACHE_TIME);
+            UIDUser uidUser = new UIDUser(uid,response.getData());
+            ServerResponse<UIDUser> uidResponse = ServerResponse.createBySuccess(uidUser);
+            return uidResponse;
         }
-        return response;
+        return ServerResponse.createByErrorMessage("登陆失败");
     }
 
     @RequestMapping(value = "logout.do",method = RequestMethod.GET)
     @ResponseBody
-    public ServerResponse<String> logout(HttpSession session){
-        session.removeAttribute(Const.CURRENT_USER);
+    public ServerResponse<String> logout(String uid){
+        iRedisService.delete(uid);
         return (ServerResponse<String>)ServerResponse.createBySuccess();
     }
 
