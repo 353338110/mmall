@@ -116,4 +116,11 @@
       update_time = now()
     where id = #{id,jdbcType=VARCHAR}
   </update>
+  <select id="quaryByDate" resultMap="BaseResultMap">
+
+    SELECT <include refid="Base_Column_List"/>
+    FROM qian_mood_log,qian_file
+
+    ORDER BY update_time desc
+  </select>
 </mapper>

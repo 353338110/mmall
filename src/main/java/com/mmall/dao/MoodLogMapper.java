@@ -2,6 +2,8 @@ package com.mmall.dao;
 
 import com.mmall.pojo.MoodLog;
 
+import java.util.List;
+
 public interface MoodLogMapper {
     int deleteByPrimaryKey(String id);
 
@@ -14,4 +16,6 @@ public interface MoodLogMapper {
     int updateByPrimaryKeySelective(MoodLog record);
 
     int updateByPrimaryKey(MoodLog record);
+
+    List<MoodLog> quaryByDate();
 }
