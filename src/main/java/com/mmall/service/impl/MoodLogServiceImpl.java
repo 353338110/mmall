@@ -7,12 +7,14 @@ import com.mmall.dao.MixedMapper;
 import com.mmall.dao.MoodLogMapper;
 import com.mmall.pojo.MoodLog;
 import com.mmall.pojo.MoodLogPic;
+import com.mmall.pojo.MoodLogUrl;
 import com.mmall.service.IMoodLogService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("iMoodLogService")
@@ -33,7 +35,14 @@ public class MoodLogServiceImpl implements IMoodLogService{
         return ServerResponse.createBySuccess("MoodLog文字上传数据库成功!");
     }
 
+    @Override
     public ServerResponse<PageInfo> getMoodLog(int currentPage,int pageSize){
-      return null;
+        //PageHelper.startPage(epage, pagesize,"addtime DESC");
+        //return scoreCheckListDao.getListCheckBySemester(likeSem);
+        List<MoodLogUrl> list = new ArrayList<>();
+        PageHelper.startPage(currentPage,pageSize);
+        list = moodLogMapper.queryByDate();
+        PageInfo pageInfo = new PageInfo(list);
+        return ServerResponse.createBySuccess(pageInfo);
     }
 }

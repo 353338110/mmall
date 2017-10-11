@@ -116,11 +116,23 @@
       update_time = now()
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <select id="quaryByDate" resultMap="BaseResultMap">
+  <resultMap type="com.mmall.pojo.MoodLogUrl" id="moodLogUrl">
+  <result property="id" column="id"/>
+  <result property="userId" column="userId"/>
+  <result property="type" column="type"/>
+  <result property="url" column="url"/>
+  <result property="content" column="content"/>
+  <result property="title" column="title"/>
+  <result property="createTime" column="create_Time"/>
+  <result property="updateTime" column="update_time"/>
 
-    SELECT <include refid="Base_Column_List"/>
-    FROM qian_mood_log,qian_file
+  </resultMap>
+  <select id="queryByDate" resultMap="moodLogUrl">
 
-    ORDER BY update_time desc
+    SELECT qian_mood_log.type,qian_mood_log.title,qian_mood_log.content,qian_mood_log.create_time,
+    qian_mood_log.update_time,qian_mood_log.id,qian_mood_log.userId,qian_file.url
+    FROM qian_mood_log  LEFT OUTER JOIN qian_file
+    ON qian_mood_log.id = qian_file.relationId
+
   </select>
 </mapper>

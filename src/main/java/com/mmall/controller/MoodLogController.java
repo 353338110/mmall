@@ -3,6 +3,7 @@ package com.mmall.controller;
 import com.mmall.common.Const;
 import com.mmall.common.ResponseCode;
 import com.mmall.common.ServerResponse;
+import com.mmall.pojo.FileBean;
 import com.mmall.pojo.MoodLog;
 import com.mmall.pojo.User;
 import com.mmall.service.IFileService;
@@ -11,9 +12,7 @@ import com.mmall.service.IRedisService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,7 +23,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/moodlog/")
@@ -69,7 +67,7 @@ public class MoodLogController {
         }
 
         //String path = request.getSession().getServletContext().getRealPath("upload");
-        List<String> fileUrls = new ArrayList<>();
+        String fileUrls = "";
         if (null==files || files.length==0){
             return ServerResponse.createBySuccessMessage("上传成功");
         }
@@ -80,12 +78,32 @@ public class MoodLogController {
             for (MultipartFile file:files) {
                 String targetFileName  = iFileService.upload(file,path,user.getId(),moodLogId,1);
                 logger.info(targetFileName);
-                fileUrls.add(Const.IMAGE_RETURN+targetFileName);
+                if ("".equals(fileUrls)){
+                    fileUrls = fileUrls+Const.IMAGE_RETURN+targetFileName;
+                }else {
+                    fileUrls = fileUrls + ","+(Const.IMAGE_RETURN+targetFileName);
+                }
+                //fileUrls.add(Const.IMAGE_RETURN+targetFileName);
             }
         }catch (Exception e){
             logger.error(e.getMessage());
         }
 
+        FileBean fileBean = new FileBean();
+        fileBean.setId(StringUtils.getPrimarykey());
+        fileBean.setRelationId(moodLog.getId());
+        fileBean.setUserId(moodLog.getUserid());
+        fileBean.setType(moodLog.getType());
+        fileBean.setUrl(fileUrls);
+        int status = iFileService.uploadBean(fileBean).getStatus();
+        if (status != 0){
+            ServerResponse.createByErrorMessage("上传失败");
+        }
         return ServerResponse.createBySuccess("上传成功");
+    }
+    @RequestMapping("query_mood.do")
+    @ResponseBody
+    public ServerResponse queryMoodLog(int currentPage,int pageSize){
+        return iMoodLogService.getMoodLog(currentPage,pageSize);
     }
 }

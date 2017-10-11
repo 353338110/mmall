@@ -1,7 +1,9 @@
 package com.mmall.dao;
 
 import com.mmall.pojo.MoodLog;
+import com.mmall.pojo.MoodLogUrl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface MoodLogMapper {
@@ -17,5 +19,5 @@ public interface MoodLogMapper {
 
     int updateByPrimaryKey(MoodLog record);
 
-    List<MoodLog> quaryByDate();
+    List<MoodLogUrl> queryByDate();
 }
