@@ -103,7 +103,11 @@ public class MoodLogController {
     }
     @RequestMapping("query_mood.do")
     @ResponseBody
-    public ServerResponse queryMoodLog(int currentPage,int pageSize){
+    public ServerResponse queryMoodLog(@RequestParam String uid,int currentPage,int pageSize){
+        if (!iRedisService.exists(uid)){
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"用户未登录，请登录");
+        }
+        iRedisService.expire(uid,Const.CACHE_TIME);
         return iMoodLogService.getMoodLog(currentPage,pageSize);
     }
 }
