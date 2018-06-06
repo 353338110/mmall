@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mmall.dao.MessageMapper" >
+  <resultMap id="BaseResultMap" type="com.mmall.pojo.Message" >
+    <constructor >
+      <idArg column="id" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="sender" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="image" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="video" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="receiver" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="ceate_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="readed" jdbcType="TINYINT" javaType="java.lang.Byte" />
+    </constructor>
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.mmall.pojo.Message" >
+    <constructor >
+      <idArg column="id" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="sender" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="image" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="video" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="receiver" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="ceate_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="readed" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="body" jdbcType="LONGVARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, sender, image, video, receiver, ceate_time, update_time, readed
+  </sql>
+  <sql id="Blob_Column_List" >
+    body
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from qian_message
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from qian_message
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.mmall.pojo.Message" >
+    insert into qian_message (id, sender, image, 
+      video, receiver, ceate_time, 
+      update_time, readed, body
+      )
+    values (#{id,jdbcType=VARCHAR}, #{sender,jdbcType=VARCHAR}, #{image,jdbcType=VARCHAR}, 
+      #{video,jdbcType=VARCHAR}, #{receiver,jdbcType=VARCHAR}, #{ceateTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{readed,jdbcType=TINYINT}, #{body,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.mmall.pojo.Message" >
+    insert into qian_message
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="sender != null" >
+        sender,
+      </if>
+      <if test="image != null" >
+        image,
+      </if>
+      <if test="video != null" >
+        video,
+      </if>
+      <if test="receiver != null" >
+        receiver,
+      </if>
+      <if test="ceateTime != null" >
+        ceate_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="readed != null" >
+        readed,
+      </if>
+      <if test="body != null" >
+        body,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="sender != null" >
+        #{sender,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null" >
+        #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="video != null" >
+        #{video,jdbcType=VARCHAR},
+      </if>
+      <if test="receiver != null" >
+        #{receiver,jdbcType=VARCHAR},
+      </if>
+      <if test="ceateTime != null" >
+        #{ceateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="readed != null" >
+        #{readed,jdbcType=TINYINT},
+      </if>
+      <if test="body != null" >
+        #{body,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mmall.pojo.Message" >
+    update qian_message
+    <set >
+      <if test="sender != null" >
+        sender = #{sender,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null" >
+        image = #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="video != null" >
+        video = #{video,jdbcType=VARCHAR},
+      </if>
+      <if test="receiver != null" >
+        receiver = #{receiver,jdbcType=VARCHAR},
+      </if>
+      <if test="ceateTime != null" >
+        ceate_time = #{ceateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="readed != null" >
+        readed = #{readed,jdbcType=TINYINT},
+      </if>
+      <if test="body != null" >
+        body = #{body,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.mmall.pojo.Message" >
+    update qian_message
+    set sender = #{sender,jdbcType=VARCHAR},
+      image = #{image,jdbcType=VARCHAR},
+      video = #{video,jdbcType=VARCHAR},
+      receiver = #{receiver,jdbcType=VARCHAR},
+      ceate_time = #{ceateTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      readed = #{readed,jdbcType=TINYINT},
+      body = #{body,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mmall.pojo.Message" >
+    update qian_message
+    set sender = #{sender,jdbcType=VARCHAR},
+      image = #{image,jdbcType=VARCHAR},
+      video = #{video,jdbcType=VARCHAR},
+      receiver = #{receiver,jdbcType=VARCHAR},
+      ceate_time = #{ceateTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      readed = #{readed,jdbcType=TINYINT}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
