@@ -14,6 +14,8 @@ public class Dispatcher {
             return;
         }
 
+        response(messageHolder.getChannel(),messageHolder.getSign());
+
         switch (messageHolder.getType()) {
             /*// 登录
             case ProtocolHeader.LOGIN:

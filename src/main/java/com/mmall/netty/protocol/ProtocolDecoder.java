@@ -1,14 +1,10 @@
-package com.mmall.netty;
+package com.mmall.netty.protocol;
 
-import com.mmall.netty.protocol.MessageHolder;
-import com.mmall.netty.protocol.ProtocolHeader;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import org.apache.log4j.Logger;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 /**
@@ -43,7 +39,9 @@ public class ProtocolDecoder extends ByteToMessageDecoder {
         }
         in.markReaderIndex();
 
-        if (in.readShort() != ProtocolHeader.MAGIC) {
+        short magic = in.readShort();
+        logger.info("magic = " +magic);
+        if (magic != ProtocolHeader.MAGIC) {
             // Magic不一致，表明不是自己的数据
             logger.info("Magic不一致");
             in.resetReaderIndex();
@@ -54,9 +52,12 @@ public class ProtocolDecoder extends ByteToMessageDecoder {
         byte sign = in.readByte();
         byte type = in.readByte();
         byte status = in.readByte();
-
+        logger.info("sign = " +sign);
+        logger.info("type = " +type);
+        logger.info("status = " +status);
         // 确认消息体长度
         int bodyLength = in.readInt();
+        logger.info("bodyLength = " +bodyLength);
         if (in.readableBytes() != bodyLength) {
             // 消息体长度不一致
             logger.info("消息体长度不一致");

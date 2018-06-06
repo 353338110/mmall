@@ -1,4 +1,4 @@
-package com.mmall.netty;
+package com.mmall.netty.protocol;
 
 import com.mmall.netty.protocol.MessageHolder;
 import com.mmall.netty.protocol.ProtocolHeader;
